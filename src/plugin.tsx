@@ -139,18 +139,7 @@ function createPanel(options: WsPluginOptions, variant: PanelVariant) {
         {open &&
           portalHost &&
           createPortal(
-            <div
-              style={{
-                position: "fixed",
-                inset: 0,
-                zIndex: 2147483000,
-                background: "#0008",
-                display: "grid",
-                placeItems: "center",
-                padding: "clamp(.75rem, 3vw, 2rem)",
-              }}
-              onClick={() => setOpen(false)}
-            >
+            <div className="aws-modal-overlay" onClick={() => setOpen(false)}>
               <div
                 ref={dialog}
                 tabIndex={-1}
@@ -189,17 +178,7 @@ function createPanel(options: WsPluginOptions, variant: PanelVariant) {
                     first.focus();
                   }
                 }}
-                style={{
-                  background: "rgb(var(--color-background, 255 255 255) / 1)",
-                  borderRadius: 8,
-                  border: "1px solid rgb(var(--color-border, 228 228 231) / 1)",
-                  width: "100%",
-                  maxWidth: "90rem",
-                  height: "100%",
-                  minHeight: 0,
-                  display: "flex",
-                  overflow: "hidden",
-                }}
+                className="aws-modal"
               >
                 <OperationSwitcher
                   key={context.operationId}

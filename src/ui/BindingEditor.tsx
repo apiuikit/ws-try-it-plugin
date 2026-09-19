@@ -57,7 +57,9 @@ export function BindingEditor({
         const inputId = `${id}-${index}`;
         const enabled = query.has(field.name);
         const current = query.get(field.name) ?? omitted[field.name] ?? "";
-        const info = [field.type, field.description].filter(Boolean).join(" · ");
+        const info = [field.type, field.description]
+          .filter(Boolean)
+          .join(" · ");
         return (
           <div className="aws-binding-field" key={field.name}>
             <div className="aws-row">
@@ -123,7 +125,7 @@ export function BindingEditor({
           </div>
         );
       })}
-      <div className="aws-row">
+      <div className="aws-row aws-binding-add">
         <input
           className="aws-input"
           aria-label="New query parameter name"

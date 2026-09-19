@@ -5,7 +5,7 @@ const MONO = "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
 // Plain CSS rather than Tailwind classes: the library's stylesheet only contains the utilities
 // the library itself uses.
 const CSS = `
-.aws-panel { --ws-border: rgb(var(--color-border, 228 228 231) / 1); --ws-surface: rgb(var(--color-surface, 250 250 250) / 1); --ws-bg: rgb(var(--color-background, 255 255 255) / 1); --ws-text: rgb(var(--color-text-primary, 24 24 27) / 1); --ws-secondary: rgb(var(--color-text-secondary, 82 82 91) / 1); --ws-muted: rgb(var(--color-text-muted, 161 161 170) / 1); --ws-primary: rgb(var(--color-primary-600, 37 99 235) / 1); --ws-neutral: rgb(var(--color-neutral-100, 241 245 249) / 1); display: flex; flex-direction: column; gap: 1.25rem; min-width: 0; font-size: .8125rem; line-height: 1.5; color: var(--ws-text); }
+.aws-panel { --ws-border: rgb(var(--color-border, 228 228 231) / 1); --ws-surface: rgb(var(--color-surface, 250 250 250) / 1); --ws-bg: rgb(var(--color-background, 255 255 255) / 1); --ws-text: rgb(var(--color-text-primary, 24 24 27) / 1); --ws-secondary: rgb(var(--color-text-secondary, 82 82 91) / 1); --ws-muted: rgb(var(--color-text-muted, 161 161 170) / 1); --ws-primary: rgb(var(--color-primary-600, 37 99 235) / 1); --ws-neutral: rgb(var(--color-neutral-100, 241 245 249) / 1); display: flex; flex-direction: column; gap: 1.25rem; min-width: 0; max-width: 100%; container: ws-panel / inline-size; font-size: .8125rem; line-height: 1.5; color: var(--ws-text); }
 .aws-panel[data-layout="split"] { flex: 1; min-height: 0; gap: 0; overflow: hidden; container-type: inline-size; }
 .aws-operation-bar { display: flex; flex: 0 0 auto; align-items: center; gap: .5rem; padding: .5rem 1rem 0; background: var(--ws-surface); box-shadow: inset 0 -1px var(--ws-border); }
 .aws-operation-bar > .aws-icon-action { margin-bottom: .5rem; }
@@ -54,7 +54,7 @@ const CSS = `
 .aws-btn-danger { color: #dc2626; }
 .aws-btn-link { color: var(--ws-primary); }
 .aws-icon-action { flex: 0 0 auto; width: 1.75rem; height: 1.75rem; padding: 0; border-radius: .25rem; }
-.aws-hint { font-size: .7rem; color: var(--ws-muted); }
+.aws-hint { overflow-wrap: anywhere; font-size: .7rem; color: var(--ws-muted); }
 .aws-bindings { display: flex; flex-direction: column; gap: .75rem; flex-shrink: 0; }
 .aws-binding-field { display: flex; flex-direction: column; gap: .375rem; }
 .aws-binding-name { flex: 0 1 40%; min-width: 0; overflow-wrap: anywhere; font-family: ${MONO}; font-size: .75rem; }
@@ -63,7 +63,7 @@ const CSS = `
 .aws-binding-field input[type="checkbox"] { accent-color: var(--ws-primary); flex-shrink: 0; }
 .aws-auth, .aws-composer { display: flex; flex-direction: column; gap: .75rem; }
 .aws-credential { display: grid; gap: .375rem; }
-.aws-field-label { font-size: .75rem; font-weight: 500; color: var(--ws-secondary); }
+.aws-field-label { overflow-wrap: anywhere; font-size: .75rem; font-weight: 500; color: var(--ws-secondary); }
 .aws-send-footer { position: sticky; bottom: 0; z-index: 1; display: flex; flex-direction: column; gap: .5rem; padding: .75rem 0; border-top: 1px solid var(--ws-border); background: var(--ws-bg); }
 .aws-panel[data-layout="split"] .aws-composer { flex: 1; }
 .aws-panel[data-layout="split"] .aws-send-footer { margin-top: auto; bottom: -1rem; }
@@ -89,7 +89,7 @@ const CSS = `
 .aws-arrow { width: 1ch; font-weight: 700; }
 .aws-arrow[data-direction="in"] { color: #16a34a; }
 .aws-arrow[data-direction="out"] { color: var(--ws-primary); }
-.aws-badge { flex-shrink: 0; padding: .125rem .375rem; border-radius: .25rem; background: #DBEAFE; color: #1E40AF; font-size: .6875rem; }
+.aws-badge { flex-shrink: 0; max-width: 100%; overflow-wrap: anywhere; padding: .125rem .375rem; border-radius: .25rem; background: #DBEAFE; color: #1E40AF; font-size: .6875rem; }
 .aws-badge[data-kind="unmatched"], .aws-badge[data-kind="pending"] { background: #FEF3C7; color: #92400E; }
 .aws-badge[data-kind="error"] { background: #FEE2E2; color: #991B1B; }
 .aws-badge[data-kind="muted"] { background: var(--ws-bg); color: var(--ws-secondary); }
@@ -133,14 +133,50 @@ export function injectStyles(): void {
     document.head.appendChild(style);
   }
   // Replace rather than skip, so a reinstall (or a dev hot reload) never keeps stale rules.
-  style.textContent =
-    PLUGIN_CSS +
-    `
-@container (max-width: 640px) {
-  .aws-panel[data-layout="split"] .aws-workspace { display: flex; overflow-y: auto; }
-  .aws-panel[data-layout="split"] .aws-request { overflow: visible; }
-  .aws-panel[data-layout="split"] .aws-response { overflow: visible; border-left: 0; border-top: 1px solid var(--ws-border); }
-  .aws-panel[data-layout="split"] .aws-log { max-height: 24rem; flex: auto; }
-  .aws-panel[data-layout="split"] .aws-send-footer { bottom: 0; }
-}`;
+  style.textContent = PLUGIN_CSS + RESPONSIVE_CSS;
 }
+
+/** Modal rules are scoped separately because the overlay is outside the panel. */
+export const RESPONSIVE_CSS = `
+.aws-modal-overlay { position: fixed; inset: 0; z-index: 2147483000; display: grid; place-items: center; box-sizing: border-box; height: 100vh; height: 100dvh; padding: clamp(.75rem, 3vw, 2rem); background: #0008; }
+.aws-modal-overlay > .aws-modal { box-sizing: border-box; display: flex; width: 100%; max-width: 90rem; height: 100%; min-width: 0; min-height: 0; overflow: hidden; border: 1px solid rgb(var(--color-border, 228 228 231) / 1); border-radius: .5rem; background: rgb(var(--color-background, 255 255 255) / 1); }
+@media (max-width: 600px), (max-height: 480px) {
+  .aws-modal-overlay { padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px); }
+  .aws-modal-overlay > .aws-modal { border-radius: 0; }
+}
+@container ws-panel (max-width: 760px) {
+  .aws-panel[data-layout="split"] .aws-workspace { display: flex; overflow-y: auto; overscroll-behavior: contain; }
+  .aws-panel[data-layout="split"] .aws-request { flex: 0 0 auto; overflow: visible; padding: .75rem; }
+  .aws-panel[data-layout="split"] .aws-response { flex: 0 0 auto; overflow: visible; border-left: 0; border-top: 1px solid var(--ws-border); padding: .75rem; }
+  .aws-panel[data-layout="split"] .aws-composer { flex: none; }
+  .aws-panel[data-layout="split"] .aws-log { max-height: 24rem; flex: auto; }
+  .aws-panel[data-layout="split"] .aws-send-footer { bottom: -.75rem; }
+  .aws-panel .aws-frame > summary { flex-wrap: wrap; }
+  .aws-panel .aws-preview { flex-basis: 100%; min-width: 0; }
+}
+@container ws-panel (max-width: 480px) {
+  .aws-panel .aws-operation-bar { padding: .375rem .5rem 0; gap: .25rem; }
+  .aws-panel .aws-operation-tab { min-height: 44px; max-width: 15rem; font-size: .75rem; padding: .5rem; }
+  .aws-panel .aws-operation-tabs { scroll-padding-inline: .5rem; }
+  .aws-panel .aws-header { padding: .625rem; }
+  .aws-panel .aws-header .aws-input { order: 2; flex: 1 0 100%; width: 100%; }
+  .aws-panel .aws-header > .aws-select { flex: 1 1 8rem; max-width: calc(100% - 6rem); }
+  .aws-panel .aws-header > .aws-btn-primary, .aws-panel .aws-header > .aws-btn-danger { order: 3; flex: 1 1 auto; }
+  .aws-panel .aws-header .aws-status { order: 4; }
+  .aws-panel .aws-header > .aws-icon-action { margin-left: auto; }
+  .aws-panel .aws-btn { min-height: 44px; }
+  .aws-panel .aws-icon-action { width: 44px; height: 44px; }
+  .aws-panel .aws-input, .aws-panel .aws-select, .aws-panel .aws-textarea { font-size: 1rem; }
+  .aws-panel .aws-input, .aws-panel .aws-select { min-height: 44px; }
+  .aws-panel .aws-binding-field > .aws-row { display: grid; grid-template-columns: 1.25rem minmax(0, 1fr) auto; align-items: center; }
+  .aws-panel .aws-binding-name { grid-column: 2; }
+  .aws-panel .aws-binding-field .aws-input { grid-column: 2 / -1; width: 100%; }
+  .aws-panel .aws-binding-add { display: grid; grid-template-columns: minmax(0, 1fr) auto; }
+  .aws-panel .aws-binding-add > .aws-input { width: 100%; grid-column: 1; }
+  .aws-panel .aws-binding-add > .aws-btn { grid-column: 2; grid-row: 1 / 3; }
+  .aws-panel .aws-textarea { min-height: 10rem; }
+  .aws-panel .aws-log-empty { min-height: 10rem; }
+  .aws-panel .aws-frame > summary { gap: .375rem; padding: .5rem; }
+  .aws-panel .aws-check { min-height: 44px; }
+}
+`;
