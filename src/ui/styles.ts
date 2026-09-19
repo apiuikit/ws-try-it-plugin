@@ -7,8 +7,10 @@ const MONO = "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
 const CSS = `
 .aws-panel { --ws-border: rgb(var(--color-border, 228 228 231) / 1); --ws-surface: rgb(var(--color-surface, 250 250 250) / 1); --ws-bg: rgb(var(--color-background, 255 255 255) / 1); --ws-text: rgb(var(--color-text-primary, 24 24 27) / 1); --ws-secondary: rgb(var(--color-text-secondary, 82 82 91) / 1); --ws-muted: rgb(var(--color-text-muted, 161 161 170) / 1); --ws-primary: rgb(var(--color-primary-600, 37 99 235) / 1); --ws-neutral: rgb(var(--color-neutral-100, 241 245 249) / 1); display: flex; flex-direction: column; gap: 1.25rem; min-width: 0; font-size: .8125rem; line-height: 1.5; color: var(--ws-text); }
 .aws-panel[data-layout="split"] { flex: 1; min-height: 0; gap: 0; overflow: hidden; container-type: inline-size; }
-.aws-operation-tabs { display: flex; flex: 0 0 auto; align-items: flex-end; gap: .125rem; overflow-x: auto; padding: .5rem 1rem 0; border-bottom: 1px solid var(--ws-border); background: var(--ws-surface); }
-.aws-operation-tab { display: inline-flex; flex: 0 0 auto; align-items: center; gap: .5rem; max-width: 22rem; margin-bottom: -1px; padding: .375rem .75rem; border: 1px solid transparent; border-bottom: 0; border-radius: .375rem .375rem 0 0; background: transparent; color: var(--ws-muted); font: inherit; font-size: .875rem; font-weight: 500; cursor: pointer; transition: color .15s; }
+.aws-operation-bar { display: flex; flex: 0 0 auto; align-items: center; gap: .5rem; padding: .5rem 1rem 0; background: var(--ws-surface); box-shadow: inset 0 -1px var(--ws-border); }
+.aws-operation-bar > .aws-icon-action { margin-bottom: .5rem; }
+.aws-operation-tabs { display: flex; flex: 1; min-width: 0; align-self: flex-end; align-items: flex-end; gap: .125rem; overflow-x: auto; overflow-y: hidden; }
+.aws-operation-tab { display: inline-flex; flex: 0 0 auto; align-items: center; gap: .5rem; max-width: 22rem; padding: .375rem .75rem; border: 1px solid transparent; border-bottom: 0; border-radius: .375rem .375rem 0 0; background: transparent; color: var(--ws-muted); font: inherit; font-size: .875rem; font-weight: 500; cursor: pointer; transition: color .15s; }
 .aws-operation-tab[aria-selected="true"] { background: var(--ws-neutral); color: var(--ws-text); border-color: var(--ws-border); }
 .aws-operation-tab:hover { color: var(--ws-secondary); }
 .aws-operation-tab[aria-selected="true"]:hover { color: var(--ws-text); }
