@@ -1,0 +1,59 @@
+{
+  "name": "@apiuikit/ws-try-it-plugin",
+  "version": "0.1.0",
+  "description": "WebSocket Try it panels for APIUIKIT AsyncAPI operations",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "keywords": [
+    "asyncapi",
+    "websocket",
+    "plugin",
+    "react"
+  ],
+  "scripts": {
+    "build": "vite build && tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build",
+    "dev": "vite build --watch"
+  },
+  "peerDependencies": {
+    "apiuikit": "^1.7.0",
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "dependencies": {
+    "@cfworker/json-schema": "^4.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": "~5.9.3",
+    "vite": "^6.4.0",
+    "vitest": "^3.2.0",
+    "apiuikit": "file:../../Hands-on/apiuikit/packages/lib",
+    "jsdom": "^26.1.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

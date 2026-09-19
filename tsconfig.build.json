@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Vite bundles the JavaScript; tsc only contributes the declarations.
+    "noEmit": false,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    // No declaration maps: they point at `src`, which isn't published, so they resolve to
+    // nothing. The JS source maps embed their sources, so debugging still works.
+    "declarationMap": false,
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["src"],
+  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx"]
+}

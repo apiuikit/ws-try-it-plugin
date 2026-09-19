@@ -1,0 +1,75 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "WebSocket Echo",
+    "version": "1.0.0"
+  },
+  "servers": {
+    "local": {
+      "host": "localhost:8787",
+      "protocol": "ws"
+    }
+  },
+  "channels": {
+    "echo": {
+      "address": "/echo",
+      "messages": {
+        "text": {
+          "name": "Echo message",
+          "payload": {
+            "type": "object",
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "type": "string"
+              }
+            }
+          },
+          "examples": [
+            {
+              "payload": {
+                "text": "Hello from APIUIKIT"
+              }
+            }
+          ]
+        }
+      },
+      "bindings": {
+        "ws": {
+          "method": "GET",
+          "query": {
+            "type": "object",
+            "properties": {
+              "room": {
+                "type": "string",
+                "description": "Room to connect to.",
+                "default": "lobby"
+              },
+              "clientId": {
+                "type": "string",
+                "description": "Optional client identifier."
+              }
+            }
+          },
+          "bindingVersion": "0.1.0"
+        }
+      }
+    }
+  },
+  "operations": {
+    "sendEcho": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/echo"
+      }
+    },
+    "receiveEcho": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/echo"
+      }
+    }
+  }
+}

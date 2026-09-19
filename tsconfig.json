@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    // "Bundler" reads package exports and picks different type entry points for the library's
+    // dependencies (e.g. isomorphic-dompurify); "NodeNext" would require `module: NodeNext`
+    // plus explicit .js extensions on every import.
+    "moduleResolution": "Bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "noEmit": true,
+    "types": ["node"]
+  },
+  "include": ["src"]
+}

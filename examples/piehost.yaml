@@ -1,0 +1,138 @@
+asyncapi: 3.0.0
+info:
+  title: PieHost WebSocket Pub/Sub Demo
+  version: 1.0.0
+  description: >-
+    A test contract for the PieSocket public chat demo, described from the server perspective. Open
+    publishMessage to send; open receiveMessages in another browser tab to listen. In the publishing
+    panel, enable All traffic to see your own broadcasts when notify_self=1. The API key below is
+    the public example key published by PieHost, not a private credential. For your own cluster,
+    replace cluster and api_key and enable client-to-client (C2C) messaging.
+defaultContentType: application/json
+servers:
+  piehost:
+    host: '{cluster}.piesocket.com'
+    protocol: wss
+    description: PieHost public demo. Use your account cluster and API key if the demo is unavailable.
+    variables:
+      cluster:
+        default: free.blr2
+        description: PieSocket cluster ID.
+channels:
+  room:
+    address: /v3/{roomId}
+    title: Chat room
+    description: >-
+      Connecting joins this room. Messages are broadcast to other connections in the same room;
+      notify_self=1 also delivers them to the sender.
+    servers:
+      - $ref: '#/servers/piehost'
+    parameters:
+      roomId:
+        description: Use the same room in both tabs.
+        default: '1'
+        examples:
+          - '1'
+    bindings:
+      ws:
+        method: GET
+        bindingVersion: 0.1.0
+        query:
+          type: object
+          required:
+            - api_key
+          properties:
+            api_key:
+              type: string
+              default: gfBCocHpn18f9sKGcIjmbIWGddJCDlWNULRz0MOY
+              description: >-
+                Public demo key from the PieHost WebSocket example. Replace when using your own
+                cluster.
+            notify_self:
+              type: integer
+              enum:
+                - 0
+                - 1
+              default: 1
+              description: >-
+                1 returns your broadcasts to this connection. Omit to receive only other clients’
+                messages.
+            user:
+              type: string
+              description: Optional user identity for this connection; this does not authenticate the user.
+    messages:
+      chat:
+        $ref: '#/components/messages/Chat'
+      joining:
+        $ref: '#/components/messages/Joining'
+operations:
+  publishMessage:
+    action: receive
+    title: Publish a message
+    summary: Send a chat or joining event to the room.
+    description: >-
+      The server receives this message from the test client and broadcasts it. Enable All traffic in
+      the plugin to see self-delivered broadcasts; they are events, not request/reply responses.
+    channel:
+      $ref: '#/channels/room'
+    messages:
+      - $ref: '#/channels/room/messages/chat'
+      - $ref: '#/channels/room/messages/joining'
+  receiveMessages:
+    action: send
+    title: Receive room messages
+    summary: Listen to events broadcast by the server.
+    description: >-
+      Keep this operation connected in a second browser tab while publishing from the first. Both
+      tabs must use the same cluster, API key and room.
+    channel:
+      $ref: '#/channels/room'
+    messages:
+      - $ref: '#/channels/room/messages/chat'
+      - $ref: '#/channels/room/messages/joining'
+components:
+  messages:
+    Chat:
+      name: ChatMessage
+      title: Chat message
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - event
+          - sender
+          - text
+        properties:
+          event:
+            type: string
+            const: new_message
+          sender:
+            type: string
+          text:
+            type: string
+      examples:
+        - name: hello
+          payload:
+            event: new_message
+            sender: apiuikit-tab-a
+            text: Hello from APIUIKIT
+    Joining:
+      name: JoiningMessage
+      title: Joining event
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - event
+          - sender
+        properties:
+          event:
+            type: string
+            const: new_joining
+          sender:
+            type: string
+      examples:
+        - name: join
+          payload:
+            event: new_joining
+            sender: apiuikit-tab-a
