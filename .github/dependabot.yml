@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    # Only the host library this plugin is built against — not eslint/vite/react.
+    allow:
+      - dependency-name: apiuikit
+      - dependency-name: "@apiuikit/*"
+    open-pull-requests-limit: 1
