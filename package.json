@@ -1,6 +1,6 @@
 {
   "name": "@apiuikit/ws-try-it-plugin",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "WebSocket Try it panels for APIUIKIT AsyncAPI operations",
   "license": "Apache-2.0",
   "bugs": {
