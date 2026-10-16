@@ -1,19 +1,21 @@
-# @apiuikit/ws-try-it-plugin
+# WebSocket Try it
+
+[![npm version](https://img.shields.io/npm/v/@apiuikit/ws-try-it-plugin.svg?label=%40apiuikit%2Fws-try-it-plugin)](https://www.npmjs.com/package/@apiuikit/ws-try-it-plugin)
+[![npm downloads](https://img.shields.io/npm/dm/@apiuikit/ws-try-it-plugin.svg)](https://www.npmjs.com/package/@apiuikit/ws-try-it-plugin)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE)
+[![Docs](https://img.shields.io/badge/docs-apiuikit.com-1473FF.svg)](https://apiuikit.com/plugins/ws-try-it)
 
 WebSocket “Try it” panels for APIUIKIT. Adapted from `asyncapi-ws-plugin`, with the same connection engine, message composer, validation, frame log, routing and correlation support.
 
-## Use in APIUIKIT
-
-Build this checkout, then install it into your application:
+## Install
 
 ```sh
-# In this directory
-npm install
-npm run build
-
-# In your application (adjust the relative path)
-npm install ../ws-try-it-plugin
+npm install @apiuikit/ws-try-it-plugin
 ```
+
+Peer dependencies: `apiuikit` ^1.7 or ^2, React 18+.
+
+## Usage
 
 ```tsx
 import { AsyncAPI } from 'apiuikit';
