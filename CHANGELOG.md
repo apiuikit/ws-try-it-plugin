@@ -1,5 +1,11 @@
 # @apiuikit/ws-try-it-plugin
 
+## 0.2.0
+
+### Minor Changes
+
+- 5f7b714: Operation tabs now show the operation's `title` when it has one, instead of the channel address. Operations often share one channel, so the address alone couldn't tell tabs apart. The address moves to the tab's tooltip. Operations without a title show the address as before.
+
 ## 0.1.2
 
 ### Patch Changes
