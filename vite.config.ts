@@ -21,6 +21,7 @@ export default defineConfig({
         "react-dom",
         "apiuikit/plugin",
         "@cfworker/json-schema",
+        "@microlink/react-json-view",
       ],
     },
     target: "es2022",

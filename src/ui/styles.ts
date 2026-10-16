@@ -84,7 +84,15 @@ const CSS = `
 .aws-frame > summary { display: flex; align-items: center; gap: .5rem; padding: .625rem; cursor: pointer; list-style: none; overflow: hidden; }
 .aws-frame > summary::-webkit-details-marker { display: none; }
 .aws-frame > summary:hover { background: var(--ws-bg); }
-.aws-frame > pre { margin: 0; padding: .625rem; border-top: 1px solid var(--ws-border); white-space: pre-wrap; overflow-wrap: anywhere; color: var(--ws-text); font: inherit; }
+.aws-frame-body { display: flex; flex-direction: column; gap: .625rem; padding: .625rem; border-top: 1px solid var(--ws-border); }
+.aws-frame-body pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--ws-text); font: inherit; }
+.aws-frame-issues { padding: .5rem .625rem; border: 1px solid #fecaca; border-left: 3px solid #dc2626; border-radius: .25rem; background: color-mix(in srgb, #dc2626 8%, transparent); color: #b91c1c; }
+.aws-frame-issues strong { display: block; margin-bottom: .25rem; font-weight: 600; }
+.aws-frame-issues ul { margin: 0; padding: 0; list-style: none; }
+.aws-frame-issues li { overflow-wrap: anywhere; }
+.aws-frame-issues li::before { content: "✗ "; }
+.aws-frame-note { color: var(--ws-secondary); }
+.aws-frame-json { overflow: auto; padding: .5rem .625rem; border: 1px solid var(--ws-border); border-radius: .25rem; background: var(--ws-bg); }
 .aws-time { color: var(--ws-muted); flex-shrink: 0; }
 .aws-arrow { width: 1ch; font-weight: 700; }
 .aws-arrow[data-direction="in"] { color: #16a34a; }

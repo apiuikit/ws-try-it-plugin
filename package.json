@@ -51,7 +51,8 @@
     "react-dom": ">=18"
   },
   "dependencies": {
-    "@cfworker/json-schema": "^4.1.1"
+    "@cfworker/json-schema": "^4.1.1",
+    "@microlink/react-json-view": "^1.31.28"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.0",

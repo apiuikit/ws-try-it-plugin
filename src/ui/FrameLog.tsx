@@ -5,6 +5,7 @@ import type { CorrelationResult } from "../engine/correlation";
 import type { OperationIntent } from "../engine/intent";
 import { hasSecrets, maskSecrets } from "../engine/security";
 import { MessagesIcon } from "./icons";
+import { JsonTree } from "./JsonTree";
 import type { FrameAnalysis } from "./useFrameAnalysis";
 
 // Until the log is virtualized (PROJECT.MD §7), cap what is rendered.
@@ -368,33 +369,84 @@ const FrameRow = memo(function FrameRow({
       </summary>
       {/* Pretty-printing is deferred until the row is opened. */}
       {open && (
-        <pre>
-          {shownIssues.length > 0 &&
-            [
-              validationPartial
-                ? "Doesn’t match the spec (large payload, checked up to the first problem):"
-                : "Doesn’t match the spec:",
-              ...shownIssues.map((line) => `  ✗ ${line}`),
-              ...(!validationPartial && hiddenIssues > 0
-                ? [`  …and ${hiddenIssues} more`]
-                : []),
-              "",
-              "",
-            ].join("\n")}
-          {masked &&
-            "Values that look like secrets are hidden here; the message was sent as you wrote it.\n\n"}
-          {frame.error && `${frame.error}\n\n`}
-          {frame.isJson
-            ? JSON.stringify(
-                masked ? maskSecrets(frame.json) : frame.json,
-                null,
-                2
-              )
-            : frame.text}
-          {frame.truncated &&
-            `\n\n… truncated: ${formatSize(frame.size)} in total`}
-        </pre>
+        <FrameBody
+          frame={frame}
+          masked={masked}
+          large={large}
+          issues={shownIssues}
+          hiddenIssues={validationPartial ? 0 : hiddenIssues}
+          partial={validationPartial}
+        />
       )}
     </details>
   );
 });
+
+interface FrameBodyProps {
+  frame: Frame;
+  masked: boolean;
+  large: boolean;
+  issues: readonly string[];
+  hiddenIssues: number;
+  partial: boolean;
+}
+
+function FrameBody({
+  frame,
+  masked,
+  large,
+  issues,
+  hiddenIssues,
+  partial,
+}: FrameBodyProps) {
+  const json = frame.isJson
+    ? masked
+      ? maskSecrets(frame.json)
+      : frame.json
+    : undefined;
+
+  return (
+    <div className="aws-frame-body">
+      {frame.error && (
+        <div className="aws-frame-issues" role="alert">
+          {frame.error}
+        </div>
+      )}
+      {issues.length > 0 && (
+        <div className="aws-frame-issues" role="alert">
+          <strong>
+            {partial
+              ? "Doesn’t match the spec (large payload, checked up to the first problem)"
+              : "Doesn’t match the spec"}
+          </strong>
+          <ul>
+            {issues.map((issue, index) => (
+              <li key={index}>{issue}</li>
+            ))}
+          </ul>
+          {hiddenIssues > 0 && <span>…and {hiddenIssues} more</span>}
+        </div>
+      )}
+      {masked && (
+        <span className="aws-frame-note">
+          Values that look like secrets are hidden here; the message was sent as
+          you wrote it.
+        </span>
+      )}
+      {/* The tree only takes objects and arrays; bare JSON scalars stay as text. */}
+      {typeof json === "object" && json !== null ? (
+        <div className="aws-frame-json">
+          {/* Expanding every node of a large snapshot is slow, so start those collapsed. */}
+          <JsonTree src={json} collapsed={large ? 2 : false} />
+        </div>
+      ) : (
+        <pre>{frame.isJson ? JSON.stringify(json) : frame.text}</pre>
+      )}
+      {frame.truncated && (
+        <span className="aws-frame-note">
+          … truncated: {formatSize(frame.size)} in total
+        </span>
+      )}
+    </div>
+  );
+}
