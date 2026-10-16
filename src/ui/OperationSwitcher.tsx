@@ -27,19 +27,26 @@ export function OperationSwitcher({
         const resolved = resolveRef(document, operation) as
           | Record<string, unknown>
           | undefined;
-        const description =
-          typeof resolved?.title === "string"
-            ? resolved.title
-            : typeof resolved?.summary === "string"
-            ? resolved.summary
+        const title =
+          typeof resolved?.title === "string" && resolved.title.trim()
+            ? resolved.title.trim()
             : undefined;
+        const summary =
+          typeof resolved?.summary === "string" ? resolved.summary : undefined;
         const channel = resolveRef(document, resolved?.channel) as
           | Record<string, unknown>
           | undefined;
-        const label =
+        const address =
           typeof channel?.address === "string" && channel.address
             ? channel.address
-            : key;
+            : undefined;
+        // Operations often share one channel, so a title (when the spec gives
+        // one) tells tabs apart better than the address. The address then
+        // moves to the tooltip.
+        const label = title ?? address ?? key;
+        const description = [title && address, summary]
+          .filter(Boolean)
+          .join(" · ");
         return [{ key, label, description, intent }];
       }),
     [document]

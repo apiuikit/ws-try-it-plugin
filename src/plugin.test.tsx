@@ -259,10 +259,9 @@ it("switches modal operations without reconnecting and retains drafts and keyboa
     const selectedTab = document.querySelector(
       '[role="tab"][aria-selected="true"]'
     )!;
-    expect(selectedTab.textContent).toContain("/room");
-    expect(selectedTab.getAttribute("title")).toBe(
-      "Send · publish · Publish a message"
-    );
+    expect(selectedTab.textContent).toContain("Publish a message");
+    expect(selectedTab.textContent).not.toContain("/room");
+    expect(selectedTab.getAttribute("title")).toBe("Send · publish · /room");
   } finally {
     await act(async () => root.unmount());
     host.remove();
